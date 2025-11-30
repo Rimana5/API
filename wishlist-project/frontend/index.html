@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Мой Wishlist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            height: fit-content;
+        }
+        
+        .form-section h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--gray-light);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+        }
+        
+        .wishlist-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .section-header h2 {
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background: var(--light);
+            padding: 10px 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .wish-items {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .wish-item {
+            background: var(--light);
+            border: 2px solid var(--gray-light);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wish-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .wish-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .wish-item:hover::before {
+            width: 8px;
+        }
+        
+        .wish-item.achieved {
+            background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+            border-color: var(--success);
+        }
+        
+        .wish-item.achieved::before {
+            background: var(--success);
+        }
+        
+        .wish-header {
+            display: flex;
+            justify-content: between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+        
+        .wish-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .wish-status {
+            background: var(--warning);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .wish-status.achieved {
+            background: var(--success);
+        }
+        
+        .wish-description {
+            color: var(--gray);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .wish-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .wish-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+        }
+        
+        .wish-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .wish-actions .btn {
+            padding: 8px 15px;
+            font-size: 14px;
+            width: auto;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .price-tag {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading-spinner {
+            border: 3px solid var(--gray-light);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: var(--success);
+        }
+        
+        .notification.error {
+            background: var(--danger);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-gift"></i> Мой Wishlist</h1>
+            <p>Создайте список ваших самых заветных желаний</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="form-section">
+                <h2><i class="fas fa-plus-circle"></i> Новое желание</h2>
+                <form id="wishForm">
+                    <div class="form-group">
+                        <label for="title"><i class="fas fa-heading"></i> Название:</label>
+                        <input type="text" id="title" required placeholder="Например: Новый ноутбук">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description"><i class="fas fa-file-alt"></i> Описание:</label>
+                        <textarea id="description" rows="3" placeholder="Подробное описание..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price"><i class="fas fa-tag"></i> Цена:</label>
+                        <input type="text" id="price" placeholder="Например: 1500$">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="link"><i class="fas fa-link"></i> Ссылка:</label>
+                        <input type="url" id="link" placeholder="https://example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="is_achieved">
+                            <label for="is_achieved">Уже получено</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn">
+                        <i class="fas fa-plus"></i> Добавить в список
+                    </button>
+                </form>
+            </div>
+            
+            <div class="wishlist-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> Мой список желаний</h2>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalCount">0</div>
+                            <div class="stat-label">Всего</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="achievedCount">0</div>
+                            <div class="stat-label">Получено</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Загрузка...</p>
+                </div>
+                
+                <div class="wish-items" id="wishlist">
+                    <!-- Wish items will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        const API_URL = '/api';
+        
+        // Уведомления
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Загрузка списка желаний
+        async function loadWishlist() {
+            document.querySelector('.loading').style.display = 'block';
+            document.getElementById('wishlist').innerHTML = '';
+            
+            try {
+                const response = await fetch(`${API_URL}/wishlist/`);
+                const items = await response.json();
+                displayWishlist(items);
+                updateStats(items);
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                showNotification('Ошибка загрузки списка', 'error');
+            } finally {
+                document.querySelector('.loading').style.display = 'none';
+            }
+        }
+        
+        // Обновление статистики
+        function updateStats(items) {
+            const total = items.length;
+            const achieved = items.filter(item => item.is_achieved).length;
+            
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('achievedCount').textContent = achieved;
+        }
+        
+        // Отображение списка желаний
+        function displayWishlist(items) {
+            const container = document.getElementById('wishlist');
+            
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h3>Список желаний пуст</h3>
+                        <p>Добавьте ваше первое желание!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = items.map(item => `
+                <div class="wish-item fade-in ${item.is_achieved ? 'achieved' : ''}">
+                    <div class="wish-header">
+                        <div style="flex: 1;">
+                            <div class="wish-title">${item.title}</div>
+                            ${item.description ? `<div class="wish-description">${item.description}</div>` : ''}
+                        </div>
+                        <div class="wish-status ${item.is_achieved ? 'achieved' : ''}">
+                            ${item.is_achieved ? '✅ Получено' : '⏳ Ожидание'}
+                        </div>
+                    </div>
+                    
+                    <div class="wish-details">
+                        ${item.price ? `
+                            <div class="wish-detail">
+                                <i class="fas fa-tag"></i>
+                                <span class="price-tag">${item.price}</span>
+                            </div>
+                        ` : ''}
+                        
+                        ${item.link ? `
+                            <div class="wish-detail">
+                                <i class="fas fa-link"></i>
+                                <a href="${item.link}" target="_blank" style="color: var(--primary);">Ссылка</a>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="wish-actions">
+                        <button class="btn ${item.is_achieved ? 'btn-warning' : 'btn-success'}" 
+                                onclick="toggleAchieved(${item.id}, ${!item.is_achieved})">
+                            <i class="fas ${item.is_achieved ? 'fa-undo' : 'fa-check'}"></i>
+                            ${item.is_achieved ? 'Вернуть в ожидание' : 'Отметить полученным'}
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteItem(${item.id})">
+                            <i class="fas fa-trash"></i> Удалить
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Добавление нового желания
+        document.getElementById('wishForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                price: document.getElementById('price').value,
+                link: document.getElementById('link').value,
+                is_achieved: document.getElementById('is_achieved').checked
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/wishlist/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    document.getElementById('wishForm').reset();
+                    showNotification('Желание успешно добавлено!');
+                    loadWishlist();
+                } else {
+                    throw new Error('Ошибка при добавлении');
+                }
+            } catch (error) {
+                console.error('Ошибка добавления:', error);
+                showNotification('Ошибка при добавлении желания', 'error');
+            }
+        });
+        
+        // Переключение статуса "получено"
+        async function toggleAchieved(itemId, newStatus) {
+            try {
+                const item = await (await fetch(`${API_URL}/wishlist/${itemId}`)).json();
+                const updatedItem = { ...item, is_achieved: newStatus };
+                
+                await fetch(`${API_URL}/wishlist/${itemId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedItem)
+                });
+                
+                showNotification(`Желание ${newStatus ? 'отмечено как полученное' : 'возвращено в ожидание'}!`);
+                loadWishlist();
+            } catch (error) {
+                console.error('Ошибка обновления:', error);
+                showNotification('Ошибка при обновлении', 'error');
+            }
+        }
+        
+        // Удаление желания
+        async function deleteItem(itemId) {
+            if (confirm('Вы уверены, что хотите удалить это желание?')) {
+                try {
+                    await fetch(`${API_URL}/wishlist/${itemId}`, {
+                        method: 'DELETE'
+                    });
+                    showNotification('Желание удалено!');
+                    loadWishlist();
+                } catch (error) {
+                    console.error('Ошибка удаления:', error);
+                    showNotification('Ошибка при удалении', 'error');
+                }
+            }
+        }
+        
+        // Загрузка списка при старте
+        loadWishlist();
+    </script>
+</body>
+</html>
