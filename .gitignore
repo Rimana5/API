@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.env
+alembic/versions/
+*.sqlite
+node_modules/
+dist/
+.idea/
+.vscode/
